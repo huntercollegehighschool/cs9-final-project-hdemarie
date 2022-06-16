@@ -9,6 +9,7 @@ from random import randint
 playerhealth = 35
 strmodifier = 1
 
+
 def battlereset():
     global enemyhealth
     global enemystr
@@ -21,17 +22,18 @@ def playerchoice():
     global enemystr
     global strmodifier
     global playerhealth
-    playerchoice = input("Would you like to Attack or Heal?")
-    if playerchoice.lower() == "attack":
+    playerc = input("Would you like to Attack or Heal?")
+    if playerc.lower() == "attack":
         damage = randint(2, 4) * strmodifier
         enemyhealth = enemyhealth - damage
-        print("You dealt " + str(damage) + " damage")
+        print("You dealt " + str(damage) + " health.")
         print("SOMETHING has " + str(enemyhealth) + " health remaining")
-    elif playerchoice.lower() == "heal":
+    elif playerc.lower() == "heal":
         healchance = randint(1, 4)
         if healchance > 2:
-            heal = float(playerhealth * .25)
-            playerhealth = float(playerhealth + heal)
+            heal = playerhealth * .25
+            heal = heal - (heal%1)
+            playerhealth = playerhealth + heal
             print("You have been healed for " + str(heal) + " health")
             print("You now have " + str(playerhealth) + " Health")
         else:
@@ -61,32 +63,40 @@ def enemychoice():
 
 
 def battlego():
-  global playerhealth
-  global enemyhealth
-  if playerhealth < 0:
-    print("ḭ̵̓̊s̸̜͠ ̵̦͂̃i̷̮̎͝t̸̬̎̋ ̶̧̜̃d̵̬̣͝e̷̪͋a̸͚̜̽̚t̷̬͐̊h̷̪̄ ̷̧̛̳̓i̴͕̅̀͜f̸̨̄͘ ̶͚̞͒y̴̺̍͝ó̸͓ǔ̵̢͉'̵̧̒͋ͅr̵̫͒e̸̫̓ ̸͓̏a̴̰̬͝l̶̝̊̈́͜r̶̼̞̄́e̷̮̾͗â̶͔̝͂ḑ̶͕̓͠y̵͔͋̓ ̷̗̂̈́g̸̟͈͂́o̵̼̱̎n̷̨̿e̵̘͊̓?̴̢̲̃̂")
-    again = input("Try again? (Y/N?)")
-    while again.lower() != "y" and again.lower() != "n":
-      print("Please enter one of the listed letters.")
-      if again.lower() != "y":
-        newbattle()
-      elif again.lower() != "n":
-        start()
-    return
-  elif enemyhealth < 0:
-    print("Congratulations.")
-    win()
-  else:
-    playerchoice()
+    global playerhealth
+    global enemyhealth
+    if playerhealth < 0:
+        print(
+            "ḭ̵̓̊s̸̜͠ ̵̦͂̃i̷̮̎͝t̸̬̎̋ ̶̧̜̃d̵̬̣͝e̷̪͋a̸͚̜̽̚t̷̬͐̊h̷̪̄ ̷̧̛̳̓i̴͕̅̀͜f̸̨̄͘ ̶͚̞͒y̴̺̍͝ó̸͓ǔ̵̢͉'̵̧̒͋ͅr̵̫͒e̸̫̓ ̸͓̏a̴̰̬͝l̶̝̊̈́͜r̶̼̞̄́e̷̮̾͗â̶͔̝͂ḑ̶͕̓͠y̵͔͋̓ ̷̗̂̈́g̸̟͈͂́o̵̼̱̎n̷̨̿e̵̘͊̓?̴̢̲̃̂"
+        )
+        again = input("Try again? (Y/N?)")
+        while again.lower() != "y" and again.lower() != "n":
+            print("Please enter one of the listed letters.")
+        if again.lower() == "y":
+            start()
+        elif again.lower() == "n":
+            end()
+        return
+    elif enemyhealth < 0:
+        print("Congratulations.")
+        win()
+    else:
+        playerchoice()
+
 
 def newbattle():
-  battlereset()
-  print("SOMETHING has " + str(enemyhealth) + " health")
-  battlego()
+    battlereset()
+    print("SOMETHING has " + str(enemyhealth) + " health.")
+    print("You have " + str(playerhealth) + " health.")
+    battlego()
+
 
 "---start---"
 
+
 def start():
+    global playerhealth
+    playerhealth = 35
     print(
         "You open your eyes to see yourself in an empty subway station. How did you get here?"
     )
@@ -119,6 +129,8 @@ def win():
 
 
 "---choices---"
+
+
 def train():
     print(
         'You enter the train as the doors open. A loudspeaker clicks on and announces,\"It is not your time. Please exit the train.\"'
@@ -157,7 +169,7 @@ def upstairs():
     )
     note = input("\nDo you take the post-it? (Y/N)")
     while note.lower() != "y" and note.lower() != "n":
-      print("Please enter (Y/N).")
+        print("Please enter (Y/N).")
     if note.lower() == "y":
         ynote()
     elif note.lower() == "n":
@@ -191,14 +203,13 @@ def nnote():
 
 def downstairs():
     bars = input(
-        "You look around again. Enter L to examine the void of light through the bars. Enter D to leave the stairwell."
+        "You look around again. Enter P to examine the post-it. Enter D to leave the stairwell."
     )
-    while bars.lower() != "l" and bars.lower() != "d":
+    while bars.lower() != "p" and bars.lower() != "d":
         print("Please enter one of the listed letters.")
-    if bars.lower() == "l":
-        print(
-            "The neon lights hurt your eyes. There is seemingly nothing but void for miles on end."
-        )
+    if bars.lower() == "p":
+        ynote()
+        input()
         print(
             "\nYou tear your eyes away from the bars and look down the stairs. The shadows around seem to grow larger as you stare at the note. You look up to see two white eyes glaring at you."
         )
